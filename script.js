@@ -6,18 +6,16 @@ let canvasHeight = document.getElementById("container").clientHeight;
 
 // Dynamic Variables
 let timer = 0;
+let invinsibility = 0;
 let keys = [];
 let conga = [];
+let ongoing = true;
 
 // Game Objects
 let player;
 let friend;
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
-
-function UpdateTimer(){
-    timer = (timer + 1) % 120;
-}
 
 function SetupCanvas(){
 
@@ -80,13 +78,32 @@ function RenderCanvas(){
 
     // Collisions
 
-    if(CenterPointCollision(player, friend)){
+    if(CenterPointCollision(player, friend, 16)){
         conga.push(new Follower());
         friend = new Friend();
+        UpdateInvinsibility();
+        UpdateScore();
     }
 
-    // console.log(CenterPointCollision(player, friend));
+    for (let i = 1; i < conga.length; i++){
+        let follower = conga[i];
+        if(CenterPointCollision(player, follower, 8)){
+            if(invinsibility == 0) ongoing = false;
+        }
+    }    
 
-    UpdateTimer();
-    requestAnimationFrame(RenderCanvas);  
+    // Game loop
+
+    if(ongoing){
+        UpdateTimer();
+        if(invinsibility != 0) UpdateInvinsibility();
+        requestAnimationFrame(RenderCanvas);
+    }
+
+    else GameOver();
+}
+
+function GameOver(){
+    game_text = document.getElementById("game_text");
+    game_text.textContent = "Game Over!";
 }

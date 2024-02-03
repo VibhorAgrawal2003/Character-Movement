@@ -17,6 +17,7 @@
     <!-- Environment Files -->
     <script src="helpers/inputs.js" defer></script>
     <script src="helpers/collisions.js" defer></script>
+    <script src="helpers/counters.js" defer></script>
     <script src="script.js" defer></script>
 
     <title>Character Movement</title>
@@ -25,7 +26,7 @@
     
     <header>
         <div id="label-box">
-            <h1>Conga, Conga, Conga!</h1>
+            <h1 id="game_text">Conga, Conga, Conga!</h1>
         </div>
     </header>
 
@@ -33,6 +34,12 @@
         <canvas id="game_canvas">
         </canvas>
     </main>
+
+    <section>
+        <div id="label-box">
+            <h2>Followers: <span id="score">0</span></h2>
+        </div>
+    </section>
     
 </body>
 </html>
