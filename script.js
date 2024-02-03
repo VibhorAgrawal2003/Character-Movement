@@ -5,14 +5,19 @@ let canvasWidth = document.getElementById("container").clientWidth;
 let canvasHeight = document.getElementById("container").clientHeight;
 
 // Dynamic Variables
-let keys = [];
 let timer = 0;
+let keys = [];
+let conga = [];
 
 // Game Objects
 let player;
-
+let friend;
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
+
+function UpdateTimer(){
+    timer = (timer + 1) % 120;
+}
 
 function SetupCanvas(){
 
@@ -22,6 +27,9 @@ function SetupCanvas(){
     canvas.height = canvasHeight;
 
     player = new Player();
+    friend = new Friend();
+
+    conga.push(player);
     
     // enable key presses
     document.body.addEventListener("keydown", function(event){
@@ -46,41 +54,39 @@ function SetupCanvas(){
 }
 
 function RenderCanvas(){
+    // Backgrounds
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#96ff96";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Objects
     if(player.visible){
         CheckPlayerInputs();
         player.UpdateObject();
     }
 
+    if(friend.visible){
+        friend.DrawObject();
+    }
+
+    for (let i = 0; i < conga.length - 1; i++){
+        let leader = conga[i]
+        let follower = conga[i+1];
+        if(follower.visible){
+            CheckFollowerInputs(follower, leader);
+            follower.UpdateObject();
+        }        
+    }
+
+    // Collisions
+
+    if(CenterPointCollision(player, friend)){
+        conga.push(new Follower());
+        friend = new Friend();
+    }
+
+    // console.log(CenterPointCollision(player, friend));
+
     UpdateTimer();
     requestAnimationFrame(RenderCanvas);  
-}
-
-
-function UpdateTimer(){
-    console.log(timer, keys);
-    timer = (timer + 1) % 120;
-}
-
-function CheckPlayerInputs(){
-
-    if(keys.length == 0) player.moving = false; else player.moving = true;
-
-    let right_pressed = keys.includes('ArrowRight') || keys.includes('d');
-    let left_pressed = keys.includes('ArrowLeft') || keys.includes('a');
-    let up_pressed = keys.includes('ArrowUp') || keys.includes('w');
-    let down_pressed = keys.includes('ArrowDown') || keys.includes('s');
-
-    if(up_pressed && right_pressed) player.direction = "ur";
-    else if(up_pressed && left_pressed) player.direction = "ul";
-    else if(down_pressed && right_pressed) player.direction = "dr";
-    else if(down_pressed && left_pressed) player.direction = "dl";
-
-    else if(right_pressed) player.direction = "right";
-    else if(left_pressed) player.direction = "left";
-    else if(up_pressed) player.direction = "up";
-    else if(down_pressed)player.direction = "down";
 }
