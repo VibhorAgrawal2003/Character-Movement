@@ -87,7 +87,7 @@ function RenderCanvas(){
 
     for (let i = 1; i < conga.length; i++){
         let follower = conga[i];
-        if(CenterPointCollision(player, follower, 8)){
+        if(CenterPointCollision(player, follower, 16)){
             if(invinsibility == 0) ongoing = false;
         }
     }    

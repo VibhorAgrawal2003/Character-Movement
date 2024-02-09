@@ -4,7 +4,7 @@ function UpdateTimer(){
 
 function UpdateInvinsibility(){
     invinsibility += 1;
-    if(invinsibility == 60){
+    if(invinsibility == 12){
         invinsibility = 0;
     }
 }
